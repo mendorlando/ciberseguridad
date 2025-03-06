@@ -1,0 +1,29 @@
+<?php
+// Conexión a la base de datos
+$servername = "localhost";
+$username = "root"; // Cambia esto si es necesario
+$password = ""; // Cambia esto si es necesario
+$dbname = "prueba_hacking";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verificar la conexión
+if ($conn->connect_error) {
+    die("Conexión fallida: " . $conn->connect_error);
+}
+
+// Obtener datos del formulario
+$user = $_POST['username'];
+$nueva_contrasena = $_POST['nueva_contrasena'];
+
+// Consulta vulnerable a inyección SQL
+$sql = "UPDATE usuarios SET password = '$nueva_contrasena' WHERE username = '$user'";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Contraseña cambiada correctamente para el usuario: $user";
+} else {
+    echo "Error al cambiar la contraseña: " . $conn->error;
+}
+
+$conn->close();
+?>
